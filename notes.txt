@@ -1,0 +1,83 @@
+== Current situation
+
+- I am Rob Ashton and I write code, blah blah, blah blah, blah blah, blah blah
+
+==== Why Make+Bash
+
+- Cross platform and widely available on any sensible development environment
+- Our company writes a lot of Erlang and C, so we have make and bash anyway
+  - (Our systems are pretty much beautiful diamonds wrapped in duct-tape)
+- I'm not here to evangalise or tell you that Make is what you should be using
+- It works well in our situation, it may work well in yours
+
+==== The main problem is what happens when people "just use make"
+
+- An example of a badly written Makefile
+  - Launching scripts
+  - Repeated execution, either nothing runs or everything runs
+- The difference between build systems and task management
+    - (For example, we use Make and Bash, and Make written like Bash is bad)
+    - We see this a lot of when people start building epically huge grunt/gulpfiles
+- What you were looking for was
+  - npm scripts in package.json
+  - a build script for the everything else
+
+====== What is Make?
+
+- I'm using GNU Make, pick your weapon.
+
+- Well first off, what *isn't* Make
+  - Procedural/imperative/ none of these things
+  - best example is variable expans
+  - Recursively expanded vs simply expanded variables
+
+- For bonus points: Look up the secondary expansion phase and have your mind blown
+
+- Make is all about the dependency chain between inputs and outputs (targets -> pre-reqs -> recipes)
+  - left hand side is a file/directory name
+  - contents and dependencies are instructions on how to make it!
+  - rule only pre-reqs
+
+  - EXAMPLE:  app/index.js : src/index.js
+
+- Make is all about pattern matching on inputs and outputs
+  - variables to (wildcard expansion)
+  - EXAMPLE: print out contents in a build step
+  - handy functions and examples
+    - patsubst // wildcard // addsuffix // strip // addprefix //
+
+  - variables to wildcard expansion, target output
+  - EXAMPLE: css and 'cat'
+
+- What about multiple inputs and outputs?
+  - EXAMPLE: Generate two lists (find all directories, find all files, replace extensions, you now have two lists)
+  - These can now be used in make
+
+- How does this work?
+  - .d files!
+
+- Tying it together
+  - Project with multiple CSS packages, find all the index.styl -> compile into index.css
+  - Cat the css togethers into app.css
+
+##### A common widget pattern across our projects
+
+- img/css/js/etc
+- node_modules/module/css
+- node_modules/module/img
+- /site/app.css
+- /site/img/
+
+- How about parallising this?
+
+##### Re-using Makefiles
+  - A good makefile can be used across projects
+  - Separate configuration and actions,
+  - suitable conventions about where things can be found in a project
+
+##### Recap
+
+- Set up configuration
+- Declare inputs/outputs via pattern matching
+- Execute rules and let Make work out whether they need executing or not
+- The use of conventions across projects facillitates re-use of a single make file
