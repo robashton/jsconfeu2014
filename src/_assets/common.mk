@@ -8,7 +8,6 @@ STYLUSFILES := $(wildcard $(WIDGET_DIR)/*/*.styl)
 STYLUSINDEXFILES := $(wildcard $(WIDGET_DIR)/*/index.styl)
 OUTPUTCSSFILES := $(patsubst %.styl,%.css, $(STYLUSINDEXFILES))
 
-
 .DEFAULT_GOAL=all
 
 all: code style images common.mk
