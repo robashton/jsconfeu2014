@@ -1,12 +1,14 @@
 addCelestia = (container) ->
-  container.append '<div class="celestia"></div>'
-  celestia = container.querySelector '.celestia'
-  hookEvents celestia
+  child = document.createElement("div")
+  child.className = "celestia"
+  container.appendChild(child)
+  hookEvents child
 
 hookEvents = (element) ->
-  if element.className.indexOf 'selected'
-    element.className = 'celestia'
-  else
-    element.className = 'celestia selected'
+  element.onclick = () ->
+    if (element.className.indexOf 'selected') != -1
+      element.className = 'celestia'
+    else
+      element.className = 'celestia selected'
 
 window.celestia = addCelestia

@@ -2,8 +2,9 @@ SOURCEIMAGES := $(wildcard widgets/*/img/*.png)
 COPIEDIMAGES := $(addsuffix  _lastcopied, $(SOURCEIMAGES))
 COFFEEFILES := $(wildcard widgets/*/*.coffee)
 OUTPUTJSFILES := $(patsubst %.coffee,%.js, $(COFFEEFILES))
-STYLUSFILES := $(wildcard widgets/*/index.styl)
-OUTPUTCSSFILES := $(patsubst %.styl,%.css, $(STYLUSFILES))
+STYLUSFILES := $(wildcard widgets/*/*.styl)
+STYLUSINDEXFILES := $(wildcard widgets/*/index.styl)
+OUTPUTCSSFILES := $(patsubst %.styl,%.css, $(STYLUSINDEXFILES))
 
 all: code style images
 	@echo > /dev/null
@@ -11,6 +12,7 @@ all: code style images
 clean:
 	rm -f $(OUTPUTCSSFILES)
 	rm -f $(OUTPUTJSFILES)
+	rm -f widgets/*/img/*_lastcopied
 	rm -rf site/img
 	rm -f site/widgets.js
 	rm -f site/widgets.css
@@ -28,13 +30,13 @@ images: $(COPIEDIMAGES)
 	@echo "Copied widget images across into site"
 
 widgets/%_lastcopied: widgets/% | site/img/
-	cp $^ site/img/
-	touch $@
+	cp widgets/$* site/img/
+	@touch $@
 
 site/img/:
 	mkdir -p site/img
 
-widgets/%.css: widgets/%.styl
+widgets/%.css: widgets/%.styl $(STYLUSFILES)
 	stylus $<
 
 widgets/%.js: widgets/%.coffee
