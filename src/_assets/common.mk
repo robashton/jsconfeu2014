@@ -6,7 +6,7 @@ STYLUSFILES := $(wildcard widgets/*/*.styl)
 STYLUSINDEXFILES := $(wildcard widgets/*/index.styl)
 OUTPUTCSSFILES := $(patsubst %.styl,%.css, $(STYLUSINDEXFILES))
 
-all: code style images
+all: code style images common.mk
 	@echo > /dev/null
 
 clean:
