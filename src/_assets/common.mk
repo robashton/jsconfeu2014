@@ -1,10 +1,15 @@
-SOURCEIMAGES := $(wildcard widgets/*/img/*.png)
+WIDGET_DIR ?= widgets
+
+SOURCEIMAGES := $(wildcard $(WIDGET_DIR)/*/img/*.png)
 COPIEDIMAGES := $(addsuffix  _lastcopied, $(SOURCEIMAGES))
-COFFEEFILES := $(wildcard widgets/*/*.coffee)
+COFFEEFILES := $(wildcard $(WIDGET_DIR)/*/*.coffee)
 OUTPUTJSFILES := $(patsubst %.coffee,%.js, $(COFFEEFILES))
-STYLUSFILES := $(wildcard widgets/*/*.styl)
-STYLUSINDEXFILES := $(wildcard widgets/*/index.styl)
+STYLUSFILES := $(wildcard $(WIDGET_DIR)/*/*.styl)
+STYLUSINDEXFILES := $(wildcard $(WIDGET_DIR)/*/index.styl)
 OUTPUTCSSFILES := $(patsubst %.styl,%.css, $(STYLUSINDEXFILES))
+
+
+.DEFAULT_GOAL=all
 
 all: code style images common.mk
 	@echo > /dev/null
@@ -12,16 +17,16 @@ all: code style images common.mk
 clean:
 	rm -f $(OUTPUTCSSFILES)
 	rm -f $(OUTPUTJSFILES)
-	rm -f widgets/*/img/*_lastcopied
+	rm -f $(WIDGET_DIR)/*/img/*_lastcopied
 	rm -rf site/img
-	rm -f site/widgets.js
-	rm -f site/widgets.css
+	rm -f site/$(WIDGET_DIR).js
+	rm -f site/$(WIDGET_DIR).css
 
-code: coffee site/widgets.js
-	@echo "Compiled code into widgets.js"
+code: coffee site/$(WIDGET_DIR).js
+	@echo "Compiled code into $(WIDGET_DIR).js"
 
-style: $(OUTPUTCSSFILES) site/widgets.css
-	@echo "Compiled CSS into widgets.css"
+style: $(OUTPUTCSSFILES) site/$(WIDGET_DIR).css
+	@echo "Compiled CSS into $(WIDGET_DIR).css"
 
 coffee: $(OUTPUTJSFILES)
 	@echo "Compiled coffeescript into JS"
@@ -29,23 +34,23 @@ coffee: $(OUTPUTJSFILES)
 images: $(COPIEDIMAGES)
 	@echo "Copied widget images across into site"
 
-widgets/%_lastcopied: widgets/% | site/img/
-	cp widgets/$* site/img/
+$(WIDGET_DIR)/%_lastcopied: $(WIDGET_DIR)/% | site/img/
+	cp $(WIDGET_DIR)/$* site/img/
 	@touch $@
 
 site/img/:
 	mkdir -p site/img
 
-widgets/%.css: widgets/%.styl $(STYLUSFILES)
+$(WIDGET_DIR)/%.css: $(WIDGET_DIR)/%.styl $(STYLUSFILES)
 	stylus $<
 
-widgets/%.js: widgets/%.coffee
+$(WIDGET_DIR)/%.js: $(WIDGET_DIR)/%.coffee
 	coffee -c $<
 
-site/widgets.js: $(OUTPUTJSFILES)
-	cat $^ > site/widgets.js
+site/$(WIDGET_DIR).js: $(OUTPUTJSFILES)
+	cat $^ > site/$(WIDGET_DIR).js
 
-site/widgets.css: $(OUTPUTCSSFILES)
-	cat $^ > site/widgets.css
+site/$(WIDGET_DIR).css: $(OUTPUTCSSFILES)
+	cat $^ > site/$(WIDGET_DIR).css
 
 
