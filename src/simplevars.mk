@@ -1,5 +1,5 @@
-two:=hello world
 one:=$(two)
+two:=hello world
 
 all:
 	@echo $(one)

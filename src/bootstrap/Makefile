@@ -1,4 +1,3 @@
-# Config can go here
 export WIDGET_DIR=baubles
 
 common.mk:

@@ -1,0 +1,8 @@
+ORDER
+recursivevars.mk
+simplevars.mk
+simplecopy/
+patternrules/
+wildcards/
+simplewidgets/
+bootstrap/
